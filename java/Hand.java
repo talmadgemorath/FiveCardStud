@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Hand implements Comparable<Hand> {
     private List<Card> cards;  // List of cards in the hand
@@ -183,7 +181,7 @@ public class Hand implements Comparable<Hand> {
 
     // Sort key cards and kickers by their hand values
     private void sortHand() {
-        // Sort key cards and kickers in descending order of hand value
+        // Sort key cards and kickers in descending order of hand value (chatGPT gave me Collections.sort)
         Collections.sort(keyCards, (a, b) -> Double.compare(b.getHandValue(), a.getHandValue()));
         Collections.sort(kickers, (a, b) -> Double.compare(b.getHandValue(), a.getHandValue()));
 

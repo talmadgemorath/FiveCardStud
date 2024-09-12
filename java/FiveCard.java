@@ -44,7 +44,7 @@ public class FiveCard {
 
             // Display each hand with its rank name
             for (Hand hand : hands) {
-                System.out.println(String.format("%s - %s", hand, hand.getHandType()));
+                System.out.println(String.format("%s - %s", hand, hand.getHandType())); //got .format from chatGPT
             }
         } 
         else {
@@ -57,78 +57,78 @@ public class FiveCard {
             System.out.println();
 
             try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-                List<List<Card>> hands = new ArrayList<>();
-                Set<String> seenCards = new HashSet<>();
-                boolean hasDuplicate = false;
-                String duplicateCard = null;
-                String line;
-                int handCount = 0;
-
-                while ((line = reader.readLine()) != null && handCount < 6) {
-                    // Split the line by commas
-                    String[] cardRecords = line.split(",");
-                    List<Card> hand = new ArrayList<>();
-
-                    // Process each card record
-                    for (String cardRecord : cardRecords) {
-                        // Trim spaces and create a Card object
-                        String cardValue = cardRecord.trim();
-                        if (!cardValue.isEmpty()) {
-                            String card = cardValue.substring(0, cardValue.length() - 1) + cardValue.substring(cardValue.length() - 1);
-                            
-                            // Check for duplicates
-                            if (seenCards.contains(card)) {
-                                hasDuplicate = true;
-                                duplicateCard = card;
-                            }
-                            seenCards.add(card);
-                            hand.add(new Card(cardValue.substring(0, cardValue.length() - 1), cardValue.substring(cardValue.length() - 1)));
-                        }
-                    }
-
-                    hands.add(hand);
-                    handCount++;
+              List<List<Card>> hands = new ArrayList<>();
+              List<String> seenCards = new ArrayList<>();
+              boolean hasDuplicate = false;
+              String duplicateCard = null;
+              String line;
+              int handCount = 0;
+          
+              while ((line = reader.readLine()) != null && handCount < 6) {
+                  // Split the line by commas
+                  String[] cardRecords = line.split(",");
+                  List<Card> hand = new ArrayList<>();
+          
+                  // Process each card record
+                  for (String cardRecord : cardRecords) {
+                      // Trim spaces and create a Card object
+                      String cardValue = cardRecord.trim();
+                      if (!cardValue.isEmpty()) {
+                          String card = cardValue.substring(0, cardValue.length() - 1) + cardValue.substring(cardValue.length() - 1);
+                          
+                          // Check for duplicates using the List
+                          if (seenCards.contains(card)) {
+                              hasDuplicate = true;
+                              duplicateCard = card;
+                          }
+                          seenCards.add(card);
+                          hand.add(new Card(cardValue.substring(0, cardValue.length() - 1), cardValue.substring(cardValue.length() - 1)));
+                      }
+                  }
+          
+                  hands.add(hand);
+                  handCount++;
                 }
-
-                List<Hand> handsList = new ArrayList<>();
-                for (List<Card> cardList : hands) {
-                    Hand hand = new Hand(cardList);
-                    handsList.add(hand);
-                }
-
-                // Print the hands to verify
-                System.out.println("*** Here are the six hands...");
-                for (Hand hand : handsList) {
-                    displayHand(hand);
-                }
-
-                System.out.println();
-
-                // If a duplicate was found, print the error and exit
-                if (hasDuplicate) {
-                    System.out.println("*** ERROR - DUPLICATED CARD FOUND IN DECK ***");
-                    System.out.println();
-                    System.out.println("*** DUPLICATE: " + duplicateCard + " ***");
-                    return;
-                }
-
-                // Sort hands based on their poker rank
-                Collections.sort(handsList);
-
-                // Reverse the order of hands to show the highest rank first
-                Collections.reverse(handsList);
-                System.out.println("--- WINNING HAND ORDER ---");
-
-                // Display each hand with its rank name
-                for (Hand hand : handsList) {
-                    System.out.println(String.format("%s - %s", hand, hand.getHandType()));
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+              
+                  List<Hand> handsList = new ArrayList<>();
+                  for (List<Card> cardList : hands) {
+                      Hand hand = new Hand(cardList);
+                      handsList.add(hand);
+                  }
+              
+                  // Print the hands to verify
+                  System.out.println("*** Here are the six hands...");
+                  for (Hand hand : handsList) {
+                      displayHand(hand);
+                  }
+              
+                  System.out.println();
+              
+                  // If a duplicate was found, print the error and exit
+                  if (hasDuplicate) {
+                      System.out.println("*** ERROR - DUPLICATED CARD FOUND IN DECK ***");
+                      System.out.println();
+                      System.out.println("*** DUPLICATE: " + duplicateCard + " ***");
+                      return;
+                  }
+              
+                  // Sort hands based on their poker rank
+                  Collections.sort(handsList);
+              
+                  // Reverse the order of hands to show the highest rank first
+                  Collections.reverse(handsList);
+                  System.out.println("--- WINNING HAND ORDER ---");
+              
+                  // Display each hand with its rank name
+                  for (Hand hand : handsList) {
+                      System.out.println(String.format("%s - %s", hand, hand.getHandType()));
+                  }
+              
+              } catch (IOException e) {
+                  e.printStackTrace();
     }
+  }
+}
 
     // Create and return a standard ordered deck of 52 cards
     private static List<Card> createOrderedDeck() {
