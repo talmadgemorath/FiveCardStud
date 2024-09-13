@@ -19,16 +19,22 @@ public class FiveCard {
             System.out.println();
             System.out.println("*** Shuffled 52 card deck:");
             displayDeck(deck);
-            System.out.println();
+            
+            // Display each hand
+            System.out.println("*** Here are the six hands...");
+            
+            for (int i = 0; i < 6; i++) {
+              // Extract 5 cards for the current hand from the deck
+              List<Card> handCards = new ArrayList<>(deck.subList(i * 5, i * 5 + 5));
+              for (int j = 0; j < handCards.size(); j++){
+                System.out.print(handCards.get(j) + " ");
+              }
+              System.out.println();
+            }
 
             // Deal six hands of poker from the shuffled deck
             List<Hand> hands = dealHands(deck);
 
-            // Display each hand
-            System.out.println("*** Here are the six hands...");
-            for (Hand hand : hands) {
-                displayHand(hand);
-            }
             System.out.println();
             // Display remaining cards in the deck
             System.out.println("*** Here is what remains in the deck...");
@@ -54,7 +60,19 @@ public class FiveCard {
             System.out.println("*** USING TEST DECK ***");
             System.out.println();
             System.out.println("*** File: " + filePath);
-            System.out.println();
+
+            // Display the contents of the file
+            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+              String line;
+              while ((line = reader.readLine()) != null) {
+                  System.out.println(line);
+              }
+              // Reset the reader to the beginning of the file
+              reader.close();
+              System.out.println();
+            }catch (IOException e) {
+                  e.printStackTrace();
+              }
 
             try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
               List<List<Card>> hands = new ArrayList<>();
@@ -83,16 +101,16 @@ public class FiveCard {
                           }
                           seenCards.add(card);
                           hand.add(new Card(cardValue.substring(0, cardValue.length() - 1), cardValue.substring(cardValue.length() - 1)));
+                          
                       }
                   }
-          
                   hands.add(hand);
                   handCount++;
                 }
-              
                   List<Hand> handsList = new ArrayList<>();
                   for (List<Card> cardList : hands) {
                       Hand hand = new Hand(cardList);
+                      hand.setUnsorted(cardList);
                       handsList.add(hand);
                   }
               
@@ -112,7 +130,7 @@ public class FiveCard {
                       return;
                   }
               
-                  // Sort hands based on their poker rank
+                  // Sort hands based on their hand value
                   Collections.sort(handsList);
               
                   // Reverse the order of hands to show the highest rank first
@@ -168,6 +186,7 @@ public class FiveCard {
             // Extract 5 cards for the current hand from the deck
             List<Card> handCards = new ArrayList<>(deck.subList(i * 5, i * 5 + 5));
             hands.add(new Hand(handCards));
+            hands.get(i).setUnsorted(deck.subList(i * 5, i * 5 + 5));
         }
 
         // Remove the dealt cards from the deck

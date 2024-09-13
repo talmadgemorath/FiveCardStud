@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Hand implements Comparable<Hand> {
     private List<Card> cards;  // List of cards in the hand
+    private List<Card> unsorted; // List of cards in the hand unsorted
     private String handType;   // Type of hand (e.g., "pair", "three of a kind", etc.)
     private List<Card> keyCards;  // Cards that form the key part of the hand
     private List<Card> kickers;   // Remaining cards in the hand
@@ -20,6 +21,14 @@ public class Hand implements Comparable<Hand> {
     public List<Card> getCards() {
         return cards;
     }
+    
+    public List<Card> getUnsortedCards(){
+        return unsorted;
+    }
+    
+    public void setUnsorted(List<Card> cardList){
+      this.unsorted = new ArrayList<>(cardList);
+    }
 
     // Get the type of the hand (e.g "pair","three of a kind")
     public String getHandType() {
@@ -30,7 +39,7 @@ public class Hand implements Comparable<Hand> {
     @Override
     public String toString() {
         String result = "";
-        for (Card card : cards) {
+        for (Card card : unsorted) {
             result += String.format("%3s", card) + " "; // Format each card in the hand
         }
         return result;
@@ -214,11 +223,12 @@ public class Hand implements Comparable<Hand> {
                 return cardComparison;
             }
         }
-        for(Card card: cards){
+        for(Card card: cards){ // If the hands are the same, take suit into account
           card.setHandValue(card.suitValue());
         }
         for(int i=this.keyCards.size();i<cards.size();i++){
-           int cardComparison = Double.compare(this.cards.get(i).getHandValue(), other.cards.get(i).getHandValue());
+           int cardComparison = Double.compare(this.cards.get(i).getHandValue(), other.cards.get(i).getHandValue()); 
+           //Double.compare method given by ChatGPT
             if (cardComparison != 0) {
                 return cardComparison;
             }
